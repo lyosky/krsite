@@ -1,0 +1,4 @@
+.age-restricted::before {
+    content: "🔞"; /* Unicode Emoji */
+    font-size: 16px; 
+}
