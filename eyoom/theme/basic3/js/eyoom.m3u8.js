@@ -44,5 +44,18 @@ import { HlsJsP2PEngine } from 'p2p-media-loader-hlsjs';
             v.src = src;   // 네이티브 HLS (Safari)
         }
         if (window.Plyr) new Plyr(v);
+
+        // 본문 전체가 <a href="..."> 로 감싸져 있어 영상 클릭 시 상위 <a> 가
+        // 활성화되어 페이지가 이동(새로고침)하는 현상 방지.
+        // preventDefault() 로 <a> 의 기본 동작(이동)을 취소하고,
+        // stopPropagation() 로 클릭이 <a>/document 까지 버블링하지 않게 한다.
+        // (Plyr 컨트롤은 JS 핸들러로 동작하므로 정상 작동한다)
+        var guardTarget = v.closest('.eyoom-m3u8-wrap') || v.parentNode;
+        if (guardTarget) {
+            guardTarget.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }, false);
+        }
     });
 })();
